@@ -28,6 +28,7 @@ namespace Bitcoin_Crypto_Poloniex
         /// </summary>
         public App()
         {
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

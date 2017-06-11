@@ -10,6 +10,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,6 +22,7 @@ using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Windows.Web.Http;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -68,9 +70,121 @@ namespace Bitcoin_Crypto_Poloniex
             this.InitializeComponent();
             Monitoring(_items);
             Initialize();
-            
+
+
+
         }
 
+        public async Task<TileContent> GenerateTileContent()
+        {
+            return new TileContent()
+            {
+                Visual = new TileVisual()
+                {
+                    TileSmall = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children = {
+                                new AdaptiveText()
+                                {
+                                    Text = "Bitcoin"
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].BriefName,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].CurrentRateText,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileMedium = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children = {
+                                new AdaptiveText()
+                                {
+                                    Text = "Bitcoin"
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].BriefName,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].CurrentRateText,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileWide = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = "Bitcoin"
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].BriefName,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].CurrentRateText,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    },
+
+                    TileLarge = new TileBinding()
+                    {
+                        Content = new TileBindingContentAdaptive()
+                        {
+                            Children =
+                            {
+                                new AdaptiveText()
+                                {
+                                    Text = "Bitcoin"
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].BriefName,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                },
+
+                                new AdaptiveText()
+                                {
+                                    Text = Items[0].CurrentRateText,
+                                    HintStyle = AdaptiveTextStyle.CaptionSubtle
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
         public async void Initialize()
         {
             for (int i = 0; i < 7; i++)
@@ -78,6 +192,8 @@ namespace Bitcoin_Crypto_Poloniex
                 Items.Add(new CurrencyInfo(CurrencyNames[i % 7], CurrencyBriefNames[i % 7]));
                 await Task.Delay(1000);
             }
+            var notification = new TileNotification((await GenerateTileContent()).GetXml());
+            TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
         }
 
         public async void Monitoring(ObservableCollection<CurrencyInfo> listOfCurrencies)
@@ -141,7 +257,7 @@ namespace Bitcoin_Crypto_Poloniex
             }
         }
 
-        public string CurrentRateText =>  $"$ {CurrentRate:F2}"; 
+        public string CurrentRateText =>  $"$ {CurrentRate:F4}".Replace(",","."); 
 
         public CurrencyInfo(string name, string briefname)
         {
