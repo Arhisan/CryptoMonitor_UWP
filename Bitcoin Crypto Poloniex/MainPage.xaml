@@ -8,6 +8,46 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ListView x:Name="itemListView" SelectionMode="None"
+                  ScrollViewer.HorizontalScrollMode="Disabled" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollMode="Enabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                  ItemsSource="{x:Bind Items, Mode=OneWay}"
+                  Background="DarkGreen">
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:CurrencyInfo">
+                    <Grid Width="160">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="54" />
+                            <RowDefinition/>
+                            <RowDefinition Height="30">
+                            </RowDefinition>
+                            <RowDefinition Height="30">
+                                
+                            </RowDefinition>
+                            
+                        </Grid.RowDefinitions>
+                        <Image Source="{x:Bind Pic}" Width="44" Height="44" 
+                               HorizontalAlignment="Center" Grid.Row="0"/>
+                        <TextBlock Text="{x:Bind BriefName}" Foreground="Gold" TextAlignment="Center" 
+                                   FontSize="36" Grid.Row ="1"/>
+                        <TextBlock Text="{x:Bind Name}" Foreground="White" TextAlignment="Center"
+                                   FontSize="16" Grid.Row ="2"/>
+                        <TextBlock Text="{x:Bind CurrentRateText, Mode=OneWay}" Foreground="White" TextAlignment="Center"
+                                   FontSize="20" Grid.Row ="3"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid  Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
 
     </Grid>
 </Page>
